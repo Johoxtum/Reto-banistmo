@@ -1,0 +1,68 @@
+group 'org.example'
+version '1.0-SNAPSHOT'
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+
+    }
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.2.8")
+        classpath "net.serenity-bdd:serenity-single-page-report:2.2.8"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'net.serenity-bdd.aggregator'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+test {
+    systemProperty "file.encoding", "utf-8"
+
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    slf4jVersion = '1.7.7'
+    serenityCoreVersion = '3.1.20'
+    junitVersion = '4.13'
+    assertJVersion = '3.8.0'
+    selenium = "3.2.5"
+
+}
+
+dependencies {
+
+
+    implementation "net.serenity-bdd:serenity-core:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-junit:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-screenplay:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-screenplay-webdriver:${serenityCoreVersion}",
+            "net.serenity-bdd:serenity-ensure:${serenityCoreVersion}",
+            "junit:junit:${junitVersion}",
+            "org.assertj:assertj-core:${assertJVersion}"
+    implementation 'net.serenity-bdd:serenity-cucumber:3.1.15'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'org.slf4j:slf4j-simple:1.7.26'
+
+
+}
+
+
+serenity {
+    reports = ["single-page-html"]
+
+}
+
+
+test.finalizedBy(aggregate)
